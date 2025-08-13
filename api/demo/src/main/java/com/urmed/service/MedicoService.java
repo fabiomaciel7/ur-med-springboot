@@ -1,26 +1,32 @@
 package com.urmed.service;
 
-import com.urmed.model.Medico;
-import com.urmed.model.Especialidade;
-import com.urmed.repository.MedicoRepository;
-import com.urmed.repository.EspecialidadeRepository;
-import com.urmed.web.dto.MedicoDTO;
+import java.lang.reflect.Field;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.ReflectionUtils;
 
-import java.util.List;
-import java.util.stream.Collectors;
+import com.urmed.model.Especialidade;
+import com.urmed.model.Medico;
+import com.urmed.repository.ConsultaRepository;
+import com.urmed.repository.EspecialidadeRepository;
+import com.urmed.repository.MedicoRepository;
+import com.urmed.web.dto.MedicoDTO;
 
 @Service
 public class MedicoService {
 
     private final MedicoRepository medicoRepository;
     private final EspecialidadeRepository especialidadeRepository;
+    private final ConsultaRepository consultaRepository;
 
-    public MedicoService(MedicoRepository medicoRepository, EspecialidadeRepository especialidadeRepository) {
+    public MedicoService(MedicoRepository medicoRepository, EspecialidadeRepository especialidadeRepository, ConsultaRepository consultaRepository) {
         this.medicoRepository = medicoRepository;
         this.especialidadeRepository = especialidadeRepository;
+        this.consultaRepository = consultaRepository;
     }
 
     @Transactional(readOnly = true)
@@ -68,8 +74,42 @@ public class MedicoService {
 
     @Transactional
     public void deletar(Long id) {
+        if (!medicoRepository.existsById(id)) {
+            throw new RuntimeException("Médico não encontrado");
+        }
+
+        boolean existeConsulta = consultaRepository.existsByMedicoId(id);
+        if (existeConsulta) {
+            throw new RuntimeException("Não é possível excluir o médico, pois existem consultas associadas a ele.");
+        }
+
         medicoRepository.deleteById(id);
     }
+
+    @Transactional
+    public MedicoDTO atualizarParcial(Long id, Map<String, Object> campos) {
+        Medico medico = medicoRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Médico não encontrado"));
+
+        campos.forEach((chave, valor) -> {
+            if ("idEspecialidade".equals(chave)) {
+                Long idEsp = Long.valueOf(valor.toString());
+                Especialidade especialidade = especialidadeRepository.findById(idEsp)
+                        .orElseThrow(() -> new RuntimeException("Especialidade não encontrada"));
+                medico.setEspecialidade(especialidade);
+            } else {
+                Field field = ReflectionUtils.findField(Medico.class, chave);
+                if (field != null) {
+                    field.setAccessible(true);
+                    ReflectionUtils.setField(field, medico, valor);
+                }
+            }
+        });
+
+        return toDTO(medicoRepository.save(medico));
+    }
+
+
 
     private MedicoDTO toDTO(Medico medico) {
         MedicoDTO dto = new MedicoDTO();

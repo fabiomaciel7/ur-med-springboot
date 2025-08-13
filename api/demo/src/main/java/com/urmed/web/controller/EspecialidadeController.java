@@ -1,6 +1,7 @@
 package com.urmed.web.controller;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -45,4 +46,10 @@ public class EspecialidadeController {
         especialidadeService.deletar(id);
         return ResponseEntity.noContent().build();
     }
+
+    @PatchMapping("/{id}")
+    public ResponseEntity<EspecialidadeDTO> atualizarParcial(@PathVariable Long id, @RequestBody Map<String, Object> campos) {
+        return ResponseEntity.ok(especialidadeService.atualizarParcial(id, campos));
+    }
+
 }

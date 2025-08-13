@@ -1,12 +1,16 @@
 package com.urmed.service;
 
+import java.lang.reflect.Field;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.ReflectionUtils;
 
 import com.urmed.model.Paciente;
+import com.urmed.repository.ConsultaRepository;
 import com.urmed.repository.PacienteRepository;
 import com.urmed.web.dto.PacienteDTO;
 
@@ -16,9 +20,11 @@ import jakarta.persistence.EntityNotFoundException;
 public class PacienteService {
 
     private final PacienteRepository pacienteRepository;
+    private final ConsultaRepository consultaRepository;
 
-    public PacienteService(PacienteRepository pacienteRepository) {
+    public PacienteService(PacienteRepository pacienteRepository, ConsultaRepository consultaRepository) {
         this.pacienteRepository = pacienteRepository;
+        this.consultaRepository = consultaRepository;
     }
 
     @Transactional(readOnly = true)
@@ -64,10 +70,30 @@ public class PacienteService {
     @Transactional
     public void deletar(Long id) {
         if (!pacienteRepository.existsById(id)) {
-            throw new EntityNotFoundException("Paciente não encontrado com ID: " + id);
+            throw new RuntimeException("Paciente não encontrado");
         }
+
+        consultaRepository.deleteByPacienteId(id);
+
         pacienteRepository.deleteById(id);
     }
+
+    @Transactional
+    public PacienteDTO atualizarParcial(Long id, Map<String, Object> campos) {
+        Paciente paciente = pacienteRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Paciente não encontrado"));
+
+        campos.forEach((chave, valor) -> {
+            Field field = ReflectionUtils.findField(Paciente.class, chave);
+            if (field != null) {
+                field.setAccessible(true);
+                ReflectionUtils.setField(field, paciente, valor);
+            }
+        });
+
+        return toDTO(pacienteRepository.save(paciente));
+    }
+
 
     // Converte Entity -> DTO
     private PacienteDTO toDTO(Paciente paciente) {
@@ -92,4 +118,5 @@ public class PacienteService {
         paciente.setDataNascimento(dto.getDataNascimento());
         return paciente;
     }
+
 }
