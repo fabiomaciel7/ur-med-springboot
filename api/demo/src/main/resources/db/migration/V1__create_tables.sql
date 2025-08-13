@@ -29,8 +29,10 @@ CREATE TABLE funcionario (
     cpf NVARCHAR(14) NOT NULL UNIQUE,
     cargo NVARCHAR(50),
     telefone NVARCHAR(20),
-    email NVARCHAR(100)
+    email NVARCHAR(100),
+    senha NVARCHAR(255) NOT NULL
 );
+
 
 CREATE TABLE agendamento (
     id BIGINT IDENTITY PRIMARY KEY,
