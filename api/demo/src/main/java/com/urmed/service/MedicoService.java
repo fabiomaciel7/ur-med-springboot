@@ -14,6 +14,7 @@ import com.urmed.model.Medico;
 import com.urmed.repository.ConsultaRepository;
 import com.urmed.repository.EspecialidadeRepository;
 import com.urmed.repository.MedicoRepository;
+import com.urmed.repository.AgendamentoRepository;
 import com.urmed.web.dto.MedicoDTO;
 
 @Service
@@ -22,11 +23,13 @@ public class MedicoService {
     private final MedicoRepository medicoRepository;
     private final EspecialidadeRepository especialidadeRepository;
     private final ConsultaRepository consultaRepository;
+    private final AgendamentoRepository agendamentoRepository;
 
-    public MedicoService(MedicoRepository medicoRepository, EspecialidadeRepository especialidadeRepository, ConsultaRepository consultaRepository) {
+    public MedicoService(MedicoRepository medicoRepository, EspecialidadeRepository especialidadeRepository, ConsultaRepository consultaRepository, AgendamentoRepository agendamentoRepository) {
         this.medicoRepository = medicoRepository;
         this.especialidadeRepository = especialidadeRepository;
         this.consultaRepository = consultaRepository;
+        this.agendamentoRepository = agendamentoRepository;
     }
 
     @Transactional(readOnly = true)
@@ -81,6 +84,11 @@ public class MedicoService {
         boolean existeConsulta = consultaRepository.existsByMedicoId(id);
         if (existeConsulta) {
             throw new RuntimeException("Não é possível excluir o médico, pois existem consultas associadas a ele.");
+        }
+
+        boolean existeAgendamento = agendamentoRepository.existsByMedicoId(id);
+        if (existeAgendamento){
+            throw new RuntimeException("Não é possível excluir o médico, pois existem agendamentos associadas a ele.");
         }
 
         medicoRepository.deleteById(id);

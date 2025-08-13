@@ -12,16 +12,19 @@ import org.springframework.util.ReflectionUtils;
 
 import com.urmed.model.Funcionario;
 import com.urmed.repository.FuncionarioRepository;
+import com.urmed.repository.AgendamentoRepository;
 import com.urmed.web.dto.FuncionarioDTO;
 
 @Service
 public class FuncionarioService {
 
     private final FuncionarioRepository funcionarioRepository;
+    private final AgendamentoRepository agendamentoRepository;
     private final BCryptPasswordEncoder passwordEncoder;
 
-    public FuncionarioService(FuncionarioRepository funcionarioRepository) {
+    public FuncionarioService(FuncionarioRepository funcionarioRepository, AgendamentoRepository agendamentoRepository) {
         this.funcionarioRepository = funcionarioRepository;
+        this.agendamentoRepository = agendamentoRepository;
         this.passwordEncoder = new BCryptPasswordEncoder();
     }
 
@@ -69,6 +72,9 @@ public class FuncionarioService {
     public void deletar(Long id) {
         if (!funcionarioRepository.existsById(id)) {
             throw new RuntimeException("Funcionário não encontrado");
+        }
+        if (agendamentoRepository.existsByFuncionarioId(id)) {
+            throw new RuntimeException("Não é possível excluir o funcionário: há agendamentos associados.");
         }
         funcionarioRepository.deleteById(id);
     }
