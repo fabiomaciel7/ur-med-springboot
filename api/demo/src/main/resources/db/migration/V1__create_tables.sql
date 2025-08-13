@@ -38,6 +38,7 @@ CREATE TABLE agendamento (
     id BIGINT IDENTITY PRIMARY KEY,
     data DATE NOT NULL,
     hora TIME NOT NULL,
+    tipo NVARCHAR(20) NOT NULL,
     id_medico BIGINT NOT NULL,
     id_paciente BIGINT NOT NULL,
     status NVARCHAR(20) NOT NULL,
@@ -45,6 +46,19 @@ CREATE TABLE agendamento (
     FOREIGN KEY (id_medico) REFERENCES medico(id),
     FOREIGN KEY (id_paciente) REFERENCES paciente(id),
     FOREIGN KEY (id_funcionario) REFERENCES funcionario(id)
+);
+
+CREATE TABLE exame(
+    id BIGINT IDENTITY PRIMARY KEY,
+    data DATE NOT NULL,
+    hora TIME NOT NULL,
+    tipo NVARCHAR(50) NOT NULL,
+    resultado NVARCHAR(MAX),
+    observacoes NVARCHAR(MAX),
+    id_medico BIGINT NOT NULL,
+    id_paciente BIGINT NOT NULL,
+    FOREIGN KEY (id_medico) REFERENCES medico(id),
+    FOREIGN KEY (id_paciente) REFERENCES paciente(id)
 );
 
 CREATE TABLE consulta (
