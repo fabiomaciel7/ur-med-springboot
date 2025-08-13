@@ -95,7 +95,6 @@ public class PacienteService {
     }
 
 
-    // Converte Entity -> DTO
     private PacienteDTO toDTO(Paciente paciente) {
         PacienteDTO dto = new PacienteDTO();
         dto.setId(paciente.getId());
@@ -107,7 +106,6 @@ public class PacienteService {
         return dto;
     }
 
-    // Converte DTO -> Entity
     private Paciente toEntity(PacienteDTO dto) {
         Paciente paciente = new Paciente();
         paciente.setId(dto.getId());

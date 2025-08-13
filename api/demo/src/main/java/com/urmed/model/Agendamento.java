@@ -3,7 +3,6 @@ package com.urmed.model;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -45,7 +44,6 @@ public class Agendamento {
     @JoinColumn(name = "id_funcionario", nullable = false)
     private Funcionario funcionario;
 
-    // Getters e Setters
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 

@@ -32,7 +32,6 @@ public class PacienteDTO {
     @Past(message = "A data de nascimento deve estar no passado")
     private LocalDate dataNascimento;
 
-    // Getters e Setters
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 

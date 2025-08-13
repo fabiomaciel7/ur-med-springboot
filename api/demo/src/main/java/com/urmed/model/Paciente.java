@@ -17,7 +17,7 @@ public class Paciente {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, length = 100) // restringe tamanho
+    @Column(nullable = false, length = 100)
     private String nome;
 
     @Column(length = 150)
@@ -26,22 +26,19 @@ public class Paciente {
     @Column(length = 15)
     private String telefone;
 
-    @Column(length = 14, unique = true) // garante CPF único
+    @Column(length = 14, unique = true)
     private String cpf;
 
     @Column(name = "data_nascimento")
     private LocalDate dataNascimento;
 
-    // Construtor padrão
     public Paciente() {}
 
-    // Construtor para inicialização rápida
     public Paciente(String nome, String email) {
         this.nome = nome;
         this.email = email;
     }
 
-    // Getters e Setters
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 

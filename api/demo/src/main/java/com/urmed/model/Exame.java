@@ -44,7 +44,6 @@ public class Exame {
     @JoinColumn(name = "id_paciente", nullable = false)
     private Paciente paciente;
 
-    // Getters e Setters
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 

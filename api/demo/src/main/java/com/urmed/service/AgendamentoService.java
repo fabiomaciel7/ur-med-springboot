@@ -128,8 +128,6 @@ public class AgendamentoService {
         agendamentoRepository.deleteById(id);
     }
 
-    // helpers
-
     private Long toLong(Object v) {
         if (v == null) return null;
         if (v instanceof Number n) return n.longValue();

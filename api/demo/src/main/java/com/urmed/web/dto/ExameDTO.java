@@ -32,7 +32,6 @@ public class ExameDTO {
     private String nomeMedico;
     private String nomePaciente;
 
-    // Getters e Setters
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 

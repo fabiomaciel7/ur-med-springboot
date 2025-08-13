@@ -26,7 +26,7 @@ public class FuncionarioUserDetailsService implements UserDetailsService {
         return User.builder()
                 .username(funcionario.getEmail())
                 .password(funcionario.getSenha())
-                .roles("ADMIN") // Todos funcionários são administradores
+                .roles("ADMIN")
                 .build();
     }
 }

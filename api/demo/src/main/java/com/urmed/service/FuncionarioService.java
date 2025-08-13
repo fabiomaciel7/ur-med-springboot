@@ -11,8 +11,8 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ReflectionUtils;
 
 import com.urmed.model.Funcionario;
-import com.urmed.repository.FuncionarioRepository;
 import com.urmed.repository.AgendamentoRepository;
+import com.urmed.repository.FuncionarioRepository;
 import com.urmed.web.dto.FuncionarioDTO;
 
 @Service
@@ -46,7 +46,7 @@ public class FuncionarioService {
     @Transactional
     public FuncionarioDTO salvar(FuncionarioDTO dto) {
         Funcionario funcionario = toEntity(dto);
-        funcionario.setSenha(passwordEncoder.encode(dto.getSenha())); // Criptografa a senha
+        funcionario.setSenha(passwordEncoder.encode(dto.getSenha()));
         return toDTO(funcionarioRepository.save(funcionario));
     }
 
@@ -106,7 +106,7 @@ public class FuncionarioService {
         dto.setCargo(funcionario.getCargo());
         dto.setTelefone(funcionario.getTelefone());
         dto.setEmail(funcionario.getEmail());
-        dto.setSenha(null); // Nunca retorna senha
+        dto.setSenha(null);
         return dto;
     }
 

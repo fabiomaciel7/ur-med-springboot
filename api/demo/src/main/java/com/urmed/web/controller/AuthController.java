@@ -49,7 +49,6 @@ public class AuthController {
         return ResponseEntity.ok("Logout realizado com sucesso");
     }
 
-    // Auxiliares
     public static class LoginRequest {
         private String email;
         private String senha;

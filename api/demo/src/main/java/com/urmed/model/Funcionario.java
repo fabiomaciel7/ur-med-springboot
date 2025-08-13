@@ -37,7 +37,6 @@ public class Funcionario {
     @Column(nullable = false, length = 255)
     private String senha;
 
-    // Getters e setters
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 

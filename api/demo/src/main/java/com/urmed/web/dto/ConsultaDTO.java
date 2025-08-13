@@ -24,7 +24,6 @@ public class ConsultaDTO {
     private String diagnostico;
     private String observacoes;
 
-    // Campos extras para retorno
     private String nomeMedico;
     private String nomePaciente;
 

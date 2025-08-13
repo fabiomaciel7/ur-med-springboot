@@ -26,7 +26,7 @@ public class UrmedApplication {
                 admin.setCargo("ADMIN");
                 admin.setTelefone("11999999999");
                 admin.setEmail("admin@urmed.com");
-                admin.setSenha(encoder.encode("123456")); // senha criptografada
+                admin.setSenha(encoder.encode("123456"));
                 repo.save(admin);
                 System.out.println("Usuário admin criado: admin@urmed.com / 123456");
             }
